@@ -1,1 +1,21 @@
-<p>new-meal works!</p>
+<div class="new-meal-block">
+  <h4 class="text-center text-uppercase">New meal</h4>
+  <form ngNativeValidate>
+    <div class="form-group">
+      <label for="description" class="text-uppercase">Food item / Meal</label>
+      <input type="text" class="form-control" name="description" id="description" required>
+    </div>
+    <label for="mealTime" class="text-uppercase">Mealtime</label>
+    <select name="mealTime" id="mealTime" class="form-control" required>
+      <option value="breakfast">breakfast</option>
+      <option value="snack">snack</option>
+      <option value="lunch">lunch</option>
+      <option value="dinner">dinner</option>
+    </select>
+    <div class="form-group mt-4">
+      <label for="calories" class="text-uppercase">calories</label>
+      <input type="text" class="form-control" name="calories" id="calories" required>
+    </div>
+    <button class="btn btn-secondary mt-2" type="submit">save</button>
+  </form>
+</div>
