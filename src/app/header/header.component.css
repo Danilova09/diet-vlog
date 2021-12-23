@@ -1,0 +1,20 @@
+.logo {
+  font-weight: lighter;
+  text-decoration: none;
+  color: #fff;
+}
+
+.logo-icon {
+  font-size: 35px;
+  margin-right: 10px;
+  border: 1px solid #fff;
+  padding: 0px 10px;
+}
+
+.logo-text {
+  font-size: 20px;
+}
+
+body {
+  background: #878686;
+}
