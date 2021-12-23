@@ -26,14 +26,6 @@ export class MealItemComponent implements OnInit {
     this.mealService.removingChange.subscribe((isRemoving: boolean) => {
       this.isRemoving = isRemoving;
     })
-    this.route.data.subscribe(result => {
-      const meal = <Meal | null>result.meal;
-      if (meal) {
-        this.isEdit = true;
-      } else {
-        this.isEdit = false;
-      }
-    })
   }
 
   onRemove() {

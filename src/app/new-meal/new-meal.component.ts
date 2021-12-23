@@ -31,14 +31,17 @@ export class NewMealComponent implements OnInit {
           description: meal.description,
           calories: meal.calories,
           mealTime: meal.mealTime,
+          date: meal.date,
         })
       } else {
+        const date = new Date().toISOString().slice(0, 10);
         this.isEdit = false;
         this.editedId = '';
         this.setFormValue({
           description: '',
           calories: '',
           mealTime: '',
+          date: date,
         })
       }
     })
@@ -56,7 +59,9 @@ export class NewMealComponent implements OnInit {
       id,
       this.mealForm.value.description,
       this.mealForm.value.calories,
-      this.mealForm.value.mealTime);
+      this.mealForm.value.mealTime,
+      this.mealForm.value.date
+    );
 
     const next = () => {
       this.mealService.fetchMeals();

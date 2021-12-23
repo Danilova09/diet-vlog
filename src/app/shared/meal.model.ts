@@ -4,5 +4,6 @@ export class Meal {
     public description: string,
     public calories: number,
     public mealTime: string,
+    public date: string,
   ) { }
 }

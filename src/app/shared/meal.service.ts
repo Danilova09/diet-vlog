@@ -14,6 +14,7 @@ export class MealService {
   fetchingMealsChange = new Subject<boolean>();
   totalCaloriesChange = new Subject<number>();
   removingChange = new Subject<boolean>();
+  mealsMainUrl = 'https://diet-vlog-default-rtdb.firebaseio.com/meals.json';
 
   constructor(
     private http: HttpClient,
@@ -31,7 +32,8 @@ export class MealService {
 
   fetchMeals() {
     this.fetchingMealsChange.next(true);
-    this.http.get<{ [id: string]: Meal }>('https://diet-vlog-default-rtdb.firebaseio.com/meals.json').pipe(map(result => {
+    this.http.get<{ [id: string]: Meal }>(this.mealsMainUrl).pipe(
+      map(result => {
       if (!result) {
         this.fetchingMealsChange.next(false);
         return [];
@@ -39,7 +41,7 @@ export class MealService {
       return Object.keys(result).map(id => {
         this.fetchingMealsChange.next(false);
         const mealData = result[id];
-        return new Meal(id, mealData.description, mealData.calories, mealData.mealTime);
+        return new Meal(id, mealData.description, mealData.calories, mealData.mealTime, mealData.date);
       })
     })).subscribe(meals => {
       this.meals = meals;
@@ -51,7 +53,7 @@ export class MealService {
   }
 
   removeMeal(meal: Meal) {
-    return  this.http.delete(`https://diet-vlog-default-rtdb.firebaseio.com/meals/${meal.id}.json`);
+    return this.http.delete(`https://diet-vlog-default-rtdb.firebaseio.com/meals/${meal.id}.json`);
   }
 
   addMeal(meal: Meal) {
@@ -59,9 +61,10 @@ export class MealService {
       description: meal.description,
       calories: meal.calories,
       mealTime: meal.mealTime,
+      date: meal.date,
     }
-    return this.http.post('https://diet-vlog-default-rtdb.firebaseio.com/meals.json', body).pipe(
-      tap( (result) => {
+    return this.http.post(this.mealsMainUrl, body).pipe(
+      tap((result) => {
         this.fetchMeals();
         void this.router.navigate(['/']);
       }));
@@ -72,6 +75,7 @@ export class MealService {
       description: meal.description,
       calories: meal.calories,
       mealTime: meal.mealTime,
+      date: meal.date,
     }
     return this.http.put(`https://diet-vlog-default-rtdb.firebaseio.com/meals/${meal.id}.json`, body).pipe(
       tap((result
@@ -86,7 +90,7 @@ export class MealService {
         if (!result) {
           return null;
         }
-        return new Meal(mealId, result.description, result.calories, result.mealTime);
+        return new Meal(mealId, result.description, result.calories, result.mealTime, result.date);
       }));
   }
 

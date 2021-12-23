@@ -22,7 +22,6 @@ export class MealsComponent implements OnInit {
 
   ngOnInit(): void {
     this.meals = this.mealService.getMeals();
-    this.totalCalories = this.mealService.getTotalCalories();
     this.mealsSubscription = this.mealService.mealsChange.subscribe((meals: Meal[]) => {
       this.meals = meals;
     })
