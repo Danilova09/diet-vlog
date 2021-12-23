@@ -5,7 +5,6 @@ import { Meal } from './meal.model';
 import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -62,9 +61,33 @@ export class MealService {
       mealTime: meal.mealTime,
     }
     return this.http.post('https://diet-vlog-default-rtdb.firebaseio.com/meals.json', body).pipe(
-      tap( () => {
+      tap( (result) => {
         this.fetchMeals();
-        void this.router.navigate(['/'])
+        void this.router.navigate(['/']);
       }));
   }
+
+  editMeal(meal: Meal) {
+    const body = {
+      description: meal.description,
+      calories: meal.calories,
+      mealTime: meal.mealTime,
+    }
+    return this.http.put(`https://diet-vlog-default-rtdb.firebaseio.com/meals/${meal.id}.json`, body).pipe(
+      tap((result
+      ) => {
+        this.fetchMeals();
+      }));
+  }
+
+  fetchMeal(mealId: string) {
+    return this.http.get<Meal>(`https://diet-vlog-default-rtdb.firebaseio.com/meals/${mealId}.json`).pipe(
+      map((result) => {
+        if (!result) {
+          return null;
+        }
+        return new Meal(mealId, result.description, result.calories, result.mealTime);
+      }));
+  }
+
 }

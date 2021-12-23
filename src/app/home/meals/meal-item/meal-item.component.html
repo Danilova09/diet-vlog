@@ -9,7 +9,7 @@
         <p><strong>{{ meal.calories }}</strong> kcal</p>
       </div>
       <div class="col-2">
-        <button class="btn btn-secondary">
+        <button class="btn btn-secondary" (click)="onEdit()">
           <i class="far fa-edit"></i>
         </button>
         <button class="btn btn-danger ml-3" (click)="onRemove()">

@@ -1,6 +1,6 @@
 <div class="new-meal-block">
-  <h4 class="text-center text-uppercase">New meal</h4>
-  <form ngNativeValidate (ngSubmit)="onCreate()" #mealForm="ngForm">
+  <h4 class="text-center text-uppercase">{{ isEdit ? 'Edit meal' : 'Add meal'}}</h4>
+  <form ngNativeValidate (ngSubmit)="onSave()" #mealForm="ngForm">
     <div class="form-group">
       <label for="description" class="text-uppercase">Food item / Meal</label>
       <input type="text" class="form-control"
@@ -24,6 +24,8 @@
              ngModel
              required>
     </div>
-    <button class="btn btn-secondary mt-2" type="submit">save</button>
+    <button class="btn btn-secondary mt-2" type="submit">
+      {{ isEdit ? 'edit' : 'add'}}
+    </button>
   </form>
 </div>
