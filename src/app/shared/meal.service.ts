@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Meal } from './meal.model';
 import { Subject } from 'rxjs';
-import { error } from '@angular/compiler/src/util';
+
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +12,7 @@ export class MealService {
   meals: Meal[] = [];
   mealsChange = new Subject<Meal[]>();
   fetchingMealsChange = new Subject<boolean>();
+  totalCaloriesChange = new Subject<number>();
 
   constructor(
     private http: HttpClient,
@@ -20,6 +21,10 @@ export class MealService {
 
   getMeals() {
     return this.meals.slice();
+  }
+
+  getTotalCalories() {
+    return this.meals.reduce((sum, meal) => sum + meal.calories, 0);
   }
 
   fetchMeals() {
@@ -33,7 +38,9 @@ export class MealService {
     })).subscribe(meals => {
       this.meals = meals;
       this.mealsChange.next(meals);
+      this.totalCaloriesChange.next(this.getTotalCalories());
     });
   }
+
 
 }
