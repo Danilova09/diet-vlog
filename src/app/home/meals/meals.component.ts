@@ -35,7 +35,6 @@ export class MealsComponent implements OnInit {
     this.mealService.fetchMeals();
   }
 
-
   ngOnDestroy() {
     this.mealsSubscription.unsubscribe();
     this.fetchingMealsSubscription.unsubscribe();

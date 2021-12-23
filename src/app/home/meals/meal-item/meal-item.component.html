@@ -12,8 +12,10 @@
         <button class="btn btn-secondary">
           <i class="far fa-edit"></i>
         </button>
-        <button class="btn btn-danger ml-3">
-          <i class="fas fa-trash-alt"></i>
+        <button class="btn btn-danger ml-3" (click)="onRemove()">
+          <i class="fas fa-trash-alt" *ngIf="!isRemoving"></i>
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+                *ngIf="isRemoving"></span>
         </button>
       </div>
     </div>

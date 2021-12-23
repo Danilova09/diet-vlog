@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { Meal } from './meal.model';
 import { Subject } from 'rxjs';
 
@@ -13,6 +13,7 @@ export class MealService {
   mealsChange = new Subject<Meal[]>();
   fetchingMealsChange = new Subject<boolean>();
   totalCaloriesChange = new Subject<number>();
+  removingChange = new Subject<boolean>();
 
   constructor(
     private http: HttpClient,
@@ -30,6 +31,10 @@ export class MealService {
   fetchMeals() {
     this.fetchingMealsChange.next(true);
     this.http.get<{ [id: string]: Meal }>('https://diet-vlog-default-rtdb.firebaseio.com/meals.json').pipe(map(result => {
+      if (!result) {
+        this.fetchingMealsChange.next(false);
+        return [];
+      }
       return Object.keys(result).map(id => {
         this.fetchingMealsChange.next(false);
         const mealData = result[id];
@@ -39,8 +44,13 @@ export class MealService {
       this.meals = meals;
       this.mealsChange.next(meals);
       this.totalCaloriesChange.next(this.getTotalCalories());
+    }, () => {
+      this.fetchingMealsChange.next(false);
     });
   }
 
+  removeMeal(meal: Meal) {
+    return  this.http.delete(`https://diet-vlog-default-rtdb.firebaseio.com/meals/${meal.id}.json`);
+  }
 
 }
