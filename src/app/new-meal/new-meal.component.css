@@ -1,5 +1,5 @@
 .new-meal-block {
   display: block;
-  width: 800px;
+  max-width: 800px;
   margin: 70px auto;
 }

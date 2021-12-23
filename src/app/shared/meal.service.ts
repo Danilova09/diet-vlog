@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { map, tap } from 'rxjs/operators';
 import { Meal } from './meal.model';
 import { Subject } from 'rxjs';
+import { Router } from '@angular/router';
 
 
 @Injectable({
@@ -17,6 +18,7 @@ export class MealService {
 
   constructor(
     private http: HttpClient,
+    private router: Router,
   ) {
   }
 
@@ -53,4 +55,16 @@ export class MealService {
     return  this.http.delete(`https://diet-vlog-default-rtdb.firebaseio.com/meals/${meal.id}.json`);
   }
 
+  addMeal(meal: Meal) {
+    const body = {
+      description: meal.description,
+      calories: meal.calories,
+      mealTime: meal.mealTime,
+    }
+    return this.http.post('https://diet-vlog-default-rtdb.firebaseio.com/meals.json', body).pipe(
+      tap( () => {
+        this.fetchMeals();
+        void this.router.navigate(['/'])
+      }));
+  }
 }
