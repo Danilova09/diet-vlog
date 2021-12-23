@@ -2,11 +2,11 @@
   <div class="card-body">
     <div class="row justify-content-center align-items-center">
       <div class="col-8">
-        <p class="text-black-50">breakfast</p>
-        <p>Lorem ipsum dolor sit amet.</p>
+        <p class="text-black-50">{{ meal.mealTime }}</p>
+        <p>{{ meal.description }}</p>
       </div>
       <div class="col-2 mt-3">
-        <p><strong>500</strong> kcal</p>
+        <p><strong>{{ meal.calories }}</strong> kcal</p>
       </div>
       <div class="col-2">
         <button class="btn btn-secondary">

@@ -1,11 +1,15 @@
 <div class="container">
   <div class="meals-block">
-    <h4 class="font-weight-light">Total Calories: 1000</h4>
-    <hr class="mb-5">
-    <app-meal-item></app-meal-item>
-    <app-meal-item></app-meal-item>
-    <app-meal-item></app-meal-item>
-    <app-meal-item></app-meal-item>
-    <app-meal-item></app-meal-item>
+    <div class="text-center" *ngIf="isFetchingMeals">
+      <div class="spinner-border my-5 text-secondary" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+    <div class="meal-item" *ngIf="!isFetchingMeals">
+      <h4 class="font-weight-light">Total Calories: 1000</h4>
+      <hr class="mb-5">
+      <app-meal-item *ngFor="let meal of meals"
+      [meal]="meal"></app-meal-item>
+    </div>
   </div>
 </div>
