@@ -13,12 +13,12 @@ export class NewMealComponent implements OnInit {
   @ViewChild('mealForm') mealForm!: NgForm;
   isEdit = false;
   editedId = '';
+
   constructor(
     private mealService: MealService,
     private route: ActivatedRoute,
     private router: Router,
-  ) {
-  }
+  ) { }
 
   ngOnInit(): void {
     this.route.data.subscribe(result => {
@@ -47,7 +47,7 @@ export class NewMealComponent implements OnInit {
     })
   }
 
-  setFormValue(value: {[key: string]: string | number}) {
+  setFormValue(value: { [key: string]: string | number }) {
     setTimeout(() => {
       this.mealForm.setValue(value);
     });
@@ -62,17 +62,10 @@ export class NewMealComponent implements OnInit {
       this.mealForm.value.mealTime,
       this.mealForm.value.date
     );
-
-    const next = () => {
-      this.mealService.fetchMeals();
-      void this.router.navigate(['/']);
-    }
-
     if (this.isEdit) {
-      this.mealService.editMeal(meal).subscribe(next);
+      this.mealService.editMeal(meal).subscribe();
     } else {
-      this.mealService.addMeal(meal).subscribe(next);
+      this.mealService.addMeal(meal).subscribe();
     }
-
   }
 }

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { Meal } from './meal.model';
-import { Subject } from 'rxjs';
-import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -13,39 +13,51 @@ export class MealService {
   mealsChange = new Subject<Meal[]>();
   fetchingMealsChange = new Subject<boolean>();
   totalCaloriesChange = new Subject<number>();
-  removingChange = new Subject<boolean>();
   mealsMainUrl = 'https://diet-vlog-default-rtdb.firebaseio.com/meals.json';
 
   constructor(
     private http: HttpClient,
     private router: Router,
-  ) {
-  }
+  ) { }
 
   getMeals() {
     return this.meals.slice();
   }
 
+  sortArrayByDate() {
+    this.meals.sort((a, b) => {
+      return <any>new Date(b.date) - <any>new Date(a.date);
+    })
+  }
+
   getTotalCalories() {
-    return this.meals.reduce((sum, meal) => sum + meal.calories, 0);
+    const currentDate = new Date().toISOString().slice(0, 10);
+    let sum = 0;
+    this.meals.filter((meal) => {
+      if (meal.date === currentDate) {
+        sum += meal.calories;
+      }
+    })
+    return sum;
   }
 
   fetchMeals() {
     this.fetchingMealsChange.next(true);
     this.http.get<{ [id: string]: Meal }>(this.mealsMainUrl).pipe(
       map(result => {
-      if (!result) {
-        this.fetchingMealsChange.next(false);
-        return [];
-      }
-      return Object.keys(result).map(id => {
-        this.fetchingMealsChange.next(false);
-        const mealData = result[id];
-        return new Meal(id, mealData.description, mealData.calories, mealData.mealTime, mealData.date);
-      })
-    })).subscribe(meals => {
+        if (!result) {
+          this.fetchingMealsChange.next(false);
+          return [];
+        }
+        return Object.keys(result).map(id => {
+          this.fetchingMealsChange.next(false);
+          const mealData = result[id];
+          return new Meal(id, mealData.description, mealData.calories, mealData.mealTime, mealData.date);
+        })
+      })).subscribe(meals => {
       this.meals = meals;
-      this.mealsChange.next(meals);
+      this.sortArrayByDate();
+      this.mealsChange.next(this.meals);
       this.totalCaloriesChange.next(this.getTotalCalories());
     }, () => {
       this.fetchingMealsChange.next(false);
@@ -77,11 +89,7 @@ export class MealService {
       mealTime: meal.mealTime,
       date: meal.date,
     }
-    return this.http.put(`https://diet-vlog-default-rtdb.firebaseio.com/meals/${meal.id}.json`, body).pipe(
-      tap((result
-      ) => {
-        this.fetchMeals();
-      }));
+    return this.http.put(`https://diet-vlog-default-rtdb.firebaseio.com/meals/${meal.id}.json`, body);
   }
 
   fetchMeal(mealId: string) {
@@ -93,5 +101,4 @@ export class MealService {
         return new Meal(mealId, result.description, result.calories, result.mealTime, result.date);
       }));
   }
-
 }

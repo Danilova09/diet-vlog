@@ -1,9 +1,9 @@
-import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
-import { Meal } from '../../../shared/meal.model';
-import { EMPTY, Observable, of } from 'rxjs';
-import { MealService } from '../../../shared/meal.service';
-import { mergeMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
+import { EMPTY, Observable, of } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
+import { Meal } from '../shared/meal.model';
+import { MealService } from '../shared/meal.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +23,5 @@ export class MealResolverService implements Resolve<Meal> {
       void this.router.navigate(['/']);
       return EMPTY;
     }))
-
   }
 }

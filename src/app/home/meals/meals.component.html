@@ -5,7 +5,7 @@
         <span class="sr-only">Loading...</span>
       </div>
     </div>
-    <div class="meal-item" *ngIf="!isFetchingMeals">
+    <div class="meal-items" *ngIf="!isFetchingMeals">
       <h4 class="font-weight-light">Total Calories: {{ totalCalories }}</h4>
       <hr class="mb-5">
       <app-meal-item *ngFor="let meal of meals"
