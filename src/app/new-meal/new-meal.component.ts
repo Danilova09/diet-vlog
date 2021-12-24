@@ -17,7 +17,6 @@ export class NewMealComponent implements OnInit {
   constructor(
     private mealService: MealService,
     private route: ActivatedRoute,
-    private router: Router,
   ) { }
 
   ngOnInit(): void {
